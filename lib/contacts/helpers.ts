@@ -99,6 +99,8 @@ export const updateContact = async (id: string, updatedContact: IContact) => {
 }
 
 export const deleteContact = async (id: string) => {
-    console.log(id)
+    const data = await readData();
+    const newData = data.filter((c: IContact) => c.id !== id);
+    await writeData(newData);
     return true;
 }
