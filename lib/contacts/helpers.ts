@@ -89,12 +89,16 @@ export const createContact = async (contact: IContact) => {
     }
 }
 
-export const updateContact = async (id: number, updatedContact: IContact) => {
-    console.log(id,updatedContact)
-    return updatedContact
+export const updateContact = async (id: string, updatedContact: IContact) => {
+    const data = await readData();
+    const index = data.findIndex((c: IContact)=> c.id === id);
+    if (index === -1) return null;
+    data[index] = { ...data[index], ...updatedContact };
+    await writeData(data);
+    return data[index];
 }
 
-export const deleteContact = async (id: number) => {
+export const deleteContact = async (id: string) => {
     console.log(id)
     return true;
 }
