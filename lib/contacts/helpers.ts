@@ -63,12 +63,12 @@ export const validateContact = (contact: IContact): ValidationResult => {
 }
 
 export const listAllContacts = async () => {
-  return []
+    return await readData()
 }
 
-export const getContact = async (id: number) => {
-  console.log(id)
-  return {id}
+export const getContact = async (id: string) => {
+    const data = await readData();
+    return data.find((c: IContact) => c.id === id);
 }
 
 const insertContact = async (contact: IContact) => {
