@@ -1,7 +1,8 @@
 export interface IContact {
+    id?: string,
     civility: "M." | "Mme."
     name: string,
-    firstname: string,
+    firstName: string,
     email: string,
     phoneNumber: string,
     nationality: string
