@@ -7,17 +7,52 @@ interface ValidationResult {
     errors: Partial<Record<keyof IContact, string>>;
 }
 
-//variables and functions to read and write json
+//setup default message for http code
+const errorCodes: Record<number, string[]> = {
+  400: ["invalid payload"],
+  404: ["not found"]
+};
+
+//if a known message is passed with e, return the correspondant status
+export const handleRouteError = (e: unknown) => {
+  let message = "Internal server error";
+  let status = 500;
+
+  if (e instanceof Error) {
+    message = e.message;
+
+    Object.entries(errorCodes).forEach(([errorCode, errors]) => {
+      if (errors.some(error => message.includes(error))) {
+        status = Number(errorCode);
+      }
+    });
+  }
+
+  return Response.json({ error: message }, { status });
+};
+
 
 const dataPath = path.join(process.cwd(), 'lib/contacts/data.json');
 
+//read data.json file and return it as an object
 const readData = async () => {
-    const json = await fs.readFile(dataPath, 'utf-8');
-    return JSON.parse(json);
+    try{
+        const json = await fs.readFile(dataPath, 'utf-8');
+        return JSON.parse(json);
+    }catch(e){
+        console.error('readData: failed', e);
+        throw new Error("Error read data file");
+    }
 }
 
+//write object to data.json file
 const writeData = async (data: IContact[]) => {
-    await fs.writeFile(dataPath, JSON.stringify(data, null, 2));
+    try{
+        await fs.writeFile(dataPath, JSON.stringify(data, null, 2));
+    }catch(e){
+        console.error('writeData: failed', e)
+        throw new Error("Error write data file")
+    }
 }
 
 
@@ -25,7 +60,7 @@ export const validateContact = (contact: IContact): ValidationResult => {
     const errors: Partial<Record<keyof IContact, string>> = {};
 
     // Civility check
-    if (contact.civility !== "M." && contact.civility !== "Mme.") {
+    if (!['M.', 'Mme.'].includes(contact.civility)) {
         errors.civility = "Civility must be 'M.' or 'Mme.'";
     }
 
@@ -62,16 +97,18 @@ export const validateContact = (contact: IContact): ValidationResult => {
     };
 }
 
-export const listAllContacts = async () => {
-    return await readData()
+export const listAllContacts = async () : Promise<IContact[]>=> {
+    return readData()
 }
 
-export const getContact = async (id: string) => {
+export const getContact = async (id: string): Promise<IContact> => {
     const data = await readData();
-    return data.find((c: IContact) => c.id === id);
+    const contact = data.find((c: IContact) => c.id === id);
+    if(contact === undefined) throw new Error("contact not found")
+    return contact
 }
 
-const insertContact = async (contact: IContact) => {
+const insertContact = async (contact: IContact): Promise<IContact> => {
     const data = await readData();
     data.push(contact);
     await writeData(data);
@@ -79,28 +116,32 @@ const insertContact = async (contact: IContact) => {
 }
 
 //add the timestamp as id to a contact, validate data and write it into json
-export const createContact = async (contact: IContact) => {
-    if(validateContact(contact).isValid){
-        const newContact = { id: Date.now().toString(), ...contact }; 
-        return insertContact(newContact)
-    }else{
-        console.log("Contact not created: ", Object.values(validateContact(contact).errors))
-        return validateContact(contact).errors
-    }
+export const createContact = async (contact: IContact): Promise<IContact | undefined> => {
+    const formValid = validateContact(contact);
+    if(!formValid.isValid) throw new Error("invalid payload")
+    const newContact = { id: Date.now().toString(), ...contact }; 
+    return insertContact(newContact)
 }
 
-export const updateContact = async (id: string, updatedContact: IContact) => {
+export const updateContact = async (contactId: string, contactData: IContact): Promise<IContact | undefined> => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {id: _id, ...sanitizedData} = contactData //avoid changing contact id
+    if(!validateContact(contactData).isValid) throw new Error("invalid payload");
+
     const data = await readData();
-    const index = data.findIndex((c: IContact)=> c.id === id);
-    if (index === -1) return null;
-    data[index] = { ...data[index], ...updatedContact };
+    const index = data.findIndex((c: IContact)=> c.id === contactId);
+    if (index === undefined) throw new Error("contact not found");
+
+    const updatedContact = { ...data[index], ...sanitizedData };
+    data[index] = updatedContact;
     await writeData(data);
-    return data[index];
+    return updatedContact;
 }
 
-export const deleteContact = async (id: string) => {
-    const data = await readData();
-    const newData = data.filter((c: IContact) => c.id !== id);
-    await writeData(newData);
-    return true;
+export const deleteContact = async (id: string) : Promise<boolean> => {
+        const data = await readData();
+        if(data.find((c: IContact) => c.id === id) === undefined) throw new Error("contact not found")
+        const newData = data.filter((c: IContact) => c.id !== id);
+        await writeData(newData);
+        return true;
 }

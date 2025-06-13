@@ -1,12 +1,20 @@
-import { createContact, listAllContacts } from "@/lib/contacts/helpers";
+import { createContact, handleRouteError, listAllContacts } from "@/lib/contacts/helpers";
 
 export const POST = async (request : Request) => {
-    const body = await request.json();
-    const newContact = await createContact(body);
-    return Response.json(newContact, { status: 201 });
+    try{
+        const body = await request.json();
+        const newContact = await createContact(body);
+        return Response.json({data: newContact}, { status: 201 });
+    }catch(e: unknown){
+        return handleRouteError(e)
+    }
 }
 
 export const GET = async () => {
-    const contact = await listAllContacts();
-    return Response.json(contact);
+    try{
+        const contact = await listAllContacts();
+        return Response.json({data: contact}, { status: 200 });
+    }catch(e: unknown){
+        return handleRouteError(e)
+    }
 }
