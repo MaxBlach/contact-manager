@@ -13,19 +13,35 @@ const errorCodes: Record<number, string[]> = {
 export const handleRouteError = (e: unknown) => {
   let message = "Internal server error";
   let status = 500;
+  let errors: Record<string, string> | undefined;
 
-  if (e instanceof Error) {
+
+  if (e instanceof ValidationError) {
+    message = e.message;
+    errors = e.errors;
+    status = 400;
+  } else if (e instanceof Error) {
     message = e.message;
 
-    Object.entries(errorCodes).forEach(([errorCode, errors]) => {
-      if (errors.some(error => message.includes(error))) {
+    Object.entries(errorCodes).forEach(([errorCode, knownMessages]) => {
+      if (knownMessages.some(err => message.includes(err))) {
         status = Number(errorCode);
       }
     });
   }
 
-  return Response.json({ error: message }, { status });
+  return Response.json({ error: message, errors }, { status });
 };
+
+export class ValidationError extends Error {
+  public errors: Record<string, string>;
+
+  constructor(message: string, errors: Record<string, string>) {
+    super(message);
+    this.name = "ValidationError";
+    this.errors = errors;
+  }
+}
 
 
 const dataPath = path.join(process.cwd(), 'lib/contacts/data.json');
@@ -73,7 +89,9 @@ const insertContact = async (contact: IContact): Promise<IContact> => {
 //add the timestamp as id to a contact, validate data and write it into json
 export const createContact = async (contact: IContact): Promise<IContact | undefined> => {
     const formValid = validateContact(contact);
-    if(!formValid.isValid) throw new Error("invalid payload")
+
+    if(!formValid.isValid) throw new ValidationError("invalid payload", formValid.errors);
+
     const newContact = { id: Date.now().toString(), ...contact }; 
     return insertContact(newContact)
 }
@@ -81,7 +99,9 @@ export const createContact = async (contact: IContact): Promise<IContact | undef
 export const updateContact = async (contactId: string, contactData: IContact): Promise<IContact | undefined> => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {id: _id, ...sanitizedData} = contactData //avoid changing contact id
-    if(!validateContact(contactData).isValid) throw new Error("invalid payload");
+    const formValid = validateContact(contactData);
+    
+    if(!formValid.isValid) throw new ValidationError("invalid payload", formValid.errors);
 
     const data = await readData();
     const index = data.findIndex((c: IContact)=> c.id === contactId);

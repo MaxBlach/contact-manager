@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { contactSchema, ContactFormValues } from "@/lib/validators/contact";
@@ -14,23 +15,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useEffect } from "react";
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 type ContactFormProps = {
-  initialValues?: Partial<ContactFormValues>;
-  onSubmit: (data: ContactFormValues) => Promise<void>;
+  initialValues?: ContactFormValues | undefined;
+  contactId?: string
   submitLabel?: string;
-  loading?: boolean;
 };
 
-export function ContactForm({
+export const ContactForm = ({
   initialValues,
-  onSubmit,
+  contactId,
   submitLabel = "Submit",
-  loading = false
-}: ContactFormProps) {
+}: ContactFormProps) => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
+    mode: 'onBlur',
     defaultValues: {
       civility: "M.",
       name: "",
@@ -38,17 +42,64 @@ export function ContactForm({
       email: "",
       phoneNumber: "",
       nationality: "",
-      ...initialValues, // Fill fields for update
     },
   });
 
-  //if initial values change, reload the form
   useEffect(() => {
-    form.reset({
-      civility: "M.",
-      ...initialValues,
-    });
+    if (initialValues) {
+      form.reset(initialValues);
+    }
   }, [initialValues, form]);
+
+  const onSubmit = async (data: ContactFormValues) => {
+  setLoading(true);
+
+  console.log("Submit")
+
+  try {
+    //If editing an existing contact: use PUT and include the contact ID. If creating a new contact: use POST
+    const method = contactId ? "PUT" : "POST";
+    const url = contactId ? `/api/contacts/${contactId}` : "/api/contacts";
+
+    const res = await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    console.log(data)
+
+    const json = await res.json();
+    console.log(json);
+
+     if (!res.ok) {
+       // If the backend returned field-specific validation errors
+       if (json.errors && typeof json.errors === "object") {
+        //  Loop through the errors and bind them to the corresponding form fields
+         for (const [field, message] of Object.entries(json.errors)) {
+           form.setError(field as keyof ContactFormValues, {
+             message: message as string,
+           });
+         }
+
+         toast.error("Some fields are invalid. Please fix them before submitting.");
+       } else {
+         toast.error(json.error || "An unknown error occurred.");
+       }
+
+       return;
+     }
+
+    toast.success("Contact saved successfully!");
+    router.push("/contacts");
+
+  } catch {
+    toast.error("Network or server error. Please try again.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <Form {...form}>
@@ -82,7 +133,7 @@ export function ContactForm({
             <FormItem>
               <FormLabel>Nom</FormLabel>
               <FormControl>
-                <Input placeholder="Nom" {...field} />
+                <Input placeholder="Dupont" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +147,7 @@ export function ContactForm({
             <FormItem>
               <FormLabel>Prénom</FormLabel>
               <FormControl>
-                <Input placeholder="Prénom" {...field} />
+                <Input placeholder="Jean" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -110,7 +161,7 @@ export function ContactForm({
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="email" {...field} />
+                <Input type="email" placeholder="jean@email.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -124,7 +175,7 @@ export function ContactForm({
             <FormItem>
               <FormLabel>Téléphone</FormLabel>
               <FormControl>
-                <Input placeholder="06 12 12 12 12" {...field} />
+                <Input placeholder="0601020304" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
