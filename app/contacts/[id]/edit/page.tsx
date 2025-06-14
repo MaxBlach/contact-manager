@@ -1,6 +1,6 @@
 import { ContactForm } from "@/components/ContactForm";
 
-export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
+const EditContactPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const { id } = await params
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/contacts/${id}`);
@@ -13,3 +13,5 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
     </div>
   );
 }
+
+export default EditContactPage;

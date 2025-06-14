@@ -54,8 +54,6 @@ export const ContactForm = ({
   const onSubmit = async (data: ContactFormValues) => {
   setLoading(true);
 
-  console.log("Submit")
-
   try {
     //If editing an existing contact: use PUT and include the contact ID. If creating a new contact: use POST
     const method = contactId ? "PUT" : "POST";
@@ -67,10 +65,7 @@ export const ContactForm = ({
       body: JSON.stringify(data),
     });
 
-    console.log(data)
-
     const json = await res.json();
-    console.log(json);
 
      if (!res.ok) {
        // If the backend returned field-specific validation errors
