@@ -36,7 +36,7 @@ export const ContactForm = ({
     resolver: zodResolver(contactSchema),
     mode: 'onBlur',
     defaultValues: {
-      civility: "M.",
+      civility: undefined,
       name: "",
       firstName: "",
       email: "",
@@ -105,7 +105,7 @@ export const ContactForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Civilité</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select {...field} onValueChange={v => v != "" && field.onChange(v)} >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner une civilité" />
