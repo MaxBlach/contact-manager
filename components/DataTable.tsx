@@ -24,11 +24,11 @@ interface DataTableProps<TData, TValue> {
   showNotFoundToast: boolean,
 }
 
-export function DataTable<TData, TValue>({
+export const DataTable = <TData, TValue>({
   columns,
   data,
   showNotFoundToast
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue>) => {
 
   const [mounted, setMounted] = useState(false)
 
