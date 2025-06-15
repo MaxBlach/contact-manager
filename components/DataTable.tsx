@@ -15,21 +15,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { toast } from "sonner"
+import { useEffect, useState } from "react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  showNotFoundToast: boolean,
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  showNotFoundToast
 }: DataTableProps<TData, TValue>) {
+
+  const [mounted, setMounted] = useState(false)
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+
+  //need to wait for component to be mounted to show toast
+  useEffect(() => {
+      setMounted(true)
+      }, [])
+  
+  useEffect(() => {
+    if (mounted &&   showNotFoundToast) {
+      toast.error("Contact introuvable.")
+    }
+  }, [mounted, showNotFoundToast])
 
   return (
     <div className="rounded-md border">

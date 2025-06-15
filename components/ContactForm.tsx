@@ -77,19 +77,19 @@ export const ContactForm = ({
            });
          }
 
-         toast.error("Some fields are invalid. Please fix them before submitting.");
+         toast.error("Certains champs sont invalides. Veuillez les corriger avant de continuer.");
        } else {
-         toast.error(json.error || "An unknown error occurred.");
+         toast.error(json.error || "Une erreur inconnue est survenue");
        }
 
        return;
      }
 
-    toast.success("Contact saved successfully!");
+    toast.success("Contact enregistré !");
     router.push("/contacts");
 
   } catch {
-    toast.error("Network or server error. Please try again.");
+    toast.error("Erreur serveur ou réseau. Veuillez réessayer.");
   } finally {
     setLoading(false);
   }

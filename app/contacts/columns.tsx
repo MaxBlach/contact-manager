@@ -56,7 +56,9 @@ export const columns: ColumnDef<IContact>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href={`contacts/${contact.id}/edit`}>Modifier</Link></DropdownMenuItem>
+            <Link href={`contacts/${contact.id}/edit`}>
+              <DropdownMenuItem>Modifier</DropdownMenuItem>
+            </Link>
             <DropdownMenuItem>Supprimer</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
