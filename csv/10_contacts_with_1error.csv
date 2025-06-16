@@ -1,0 +1,11 @@
+civility,name,firstName,email,phoneNumber,nationality
+Mme.,Durand,Emma,emma.durand@example.com,06 38 92 59 48,EE
+Mme.,Petit,Louis,louis.petit@example.com,+33 5 57 92 57 30,CN
+M.,Dubois,Hugo,hugo.dubois@example.com,+33 (0)3 38 59 81 24,EE
+M.,Dubois,Hugo,hugo.dubois@example.com,+33 (0)6 85 81 51 69,EE
+Mme.,Petit,Emma,,+33 (0)2 42 92 26 00,IN
+Mme.,Bernard,Lucas,lucas.bernard@example.com,0805823668,DE
+Mme.,Dubois,Hugo,hugo.dubois@example.com,+33 4 58 02 10 15,IT
+Mme.,Dubois,Chloé,chloé.dubois@example.com,+33 3 33 30 01 58,JP
+M.,Martin,Chloé,chloé.martin@example.com,04 36 23 99 75,EE
+M.,Durand,Julie,julie.durand@example.com,0559308823,US
