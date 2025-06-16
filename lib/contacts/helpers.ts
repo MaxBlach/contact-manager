@@ -1,7 +1,6 @@
-import { IContact } from "../types";
 import fs from 'fs/promises';
 import path from 'path';
-import { validateContact } from "../validators/contact";
+import { validateContact, IContact } from "../validators/contact";
 
 //setup default message for http code
 const errorCodes: Record<number, string[]> = {

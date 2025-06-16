@@ -1,5 +1,4 @@
 import z from "zod";
-import { IContact } from "../types";
 
 //back-end validation
 interface ValidationResult {
@@ -50,6 +49,7 @@ export const validateContact = (contact: IContact): ValidationResult => {
 
 //front-end validation
 export const contactSchema = z.object({
+    id: z.string().optional(),
     civility: z.enum(["M.","Mme."]),
     name: z.string().min(1, { message: "Le nom est requis." }).trim().regex(/^[A-Za-zÀ-ÿ\-'\s]+$/,{ message: "Le nom contient un caractère invalide"}),
     firstName: z.string().min(1, { message: "Le prénom est requis." }).trim().regex(/^[A-Za-zÀ-ÿ\-'\s]+$/,{ message: "Le prénom contient un caractère invalide"}),
@@ -58,4 +58,4 @@ export const contactSchema = z.object({
     nationality: z.string().min(1, { message: "La nationalité est obligatoire"}).trim().regex(/^[A-Za-zÀ-ÿ\s\-']+$/)
 });
 
-export type ContactFormValues = z.infer<typeof contactSchema>;
+export type IContact = z.infer<typeof contactSchema>;

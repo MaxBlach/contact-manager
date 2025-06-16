@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { contactSchema, ContactFormValues } from "@/lib/validators/contact";
+import { contactSchema, IContact } from "@/lib/validators/contact";
 import {
   Form,
   FormControl,
@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { useEffect, useState } from "react";
 
 type ContactFormProps = {
-  initialValues?: ContactFormValues | undefined;
+  initialValues?: IContact | undefined;
   contactId?: string
   submitLabel?: string;
 };
@@ -32,7 +32,7 @@ export const ContactForm = ({
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<ContactFormValues>({
+  const form = useForm<IContact>({
     resolver: zodResolver(contactSchema),
     mode: 'onBlur',
     defaultValues: {
@@ -51,7 +51,7 @@ export const ContactForm = ({
     }
   }, [initialValues, form]);
 
-  const onSubmit = async (data: ContactFormValues) => {
+  const onSubmit = async (data: IContact) => {
   setLoading(true);
 
   try {
@@ -72,7 +72,7 @@ export const ContactForm = ({
        if (json.errors && typeof json.errors === "object") {
         //  Loop through the errors and bind them to the corresponding form fields
          for (const [field, message] of Object.entries(json.errors)) {
-           form.setError(field as keyof ContactFormValues, {
+           form.setError(field as keyof IContact, {
              message: message as string,
            });
          }

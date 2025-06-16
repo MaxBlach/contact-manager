@@ -1,7 +1,7 @@
 import { CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { IContact } from "@/lib/types"
+import { IContact } from "@/lib/validators/contact"
 
 type Props = {
   contact: IContact;

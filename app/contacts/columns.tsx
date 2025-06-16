@@ -1,8 +1,9 @@
 "use client"
 
-import { IContact } from "@/lib/types"
 import { ColumnDef } from "@tanstack/react-table"
 import { ActionsCell } from "@/components/ActionsCell"
+import { IContact } from "@/lib/validators/contact"
+
 
 export const columns: ColumnDef<IContact>[] = [
   {

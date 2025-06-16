@@ -1,10 +1,10 @@
 "use client"
 
-import { IContact } from "@/lib/types"
 import { useState } from "react"
 import { toast } from "sonner"
 import { MoreHorizontal } from "lucide-react"
 import { redirect, useRouter } from "next/navigation"
+import { IContact } from "@/lib/validators/contact"
 import {
   DropdownMenu,
   DropdownMenuContent,
