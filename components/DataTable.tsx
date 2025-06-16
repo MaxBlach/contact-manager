@@ -20,7 +20,7 @@ import {
 import { IContact } from "@/lib/validators/contact"
 
 interface DataTableProps {
-  columns: ColumnDef<IContact, any>[]
+  columns: ColumnDef<IContact>[]
   data: IContact[],
 }
 

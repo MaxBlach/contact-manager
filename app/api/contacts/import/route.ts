@@ -90,7 +90,7 @@ export async function POST(request: Request) {
 
         let successful = 0;
         let failed = 0;
-        const errors: any[] = [];
+        const errors: unknown[] = [];
 
         for (const contact of contacts) {
             try {
