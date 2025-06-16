@@ -1,26 +1,29 @@
+"use client"
+import { useEffect, useState } from "react";
 import { columns } from "./columns";
 import { DataTable } from "@/components/DataTable";
+import { Input } from "@/components/ui/input";
 
-const ContactListPage = async ({ searchParams }: { 
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) => {
+const ContactListPage = () => {
+  const [search, setSearch] = useState("");
+  const [data, setData] = useState([]);
 
-  let notFound = false;
-  const { error } = await searchParams;
-
-  if(error === "notfound"){
-    notFound = true;
+  const getContacts = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/contacts?search=${search}`, {
+      cache: 'no-store',
+    });
+    const { data } = await res.json()
+    setData(data);
   }
 
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/contacts`, {
-    cache: 'no-store',
-  });
-  const { data } = await res.json()
+  useEffect(() => {
+    getContacts()
+  }, [search]);
 
   return (
-    <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} showNotFoundToast={notFound}/>
+    <div className="w-full flex flex-col gap-4">
+      <Input className="w-1/2" type="text" placeholder="Rechercher (nom, prénom, email, téléphone)" value={search} onChange={(e) => setSearch(e.target.value)}/>
+      <DataTable columns={columns} data={data}/>
     </div>
   );
 }

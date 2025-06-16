@@ -8,6 +8,9 @@ const errorCodes: Record<number, string[]> = {
   404: ["not found"]
 };
 
+//fields that will be searched in the contact list
+const searchFields: (keyof IContact)[] = ['name', 'firstName', 'email', 'phoneNumber'];
+
 //if a known message is passed with e, return the correspondant status
 export const handleRouteError = (e: unknown) => {
   let message = "Internal server error";
@@ -67,8 +70,17 @@ const writeData = async (data: IContact[]) => {
 }
 
 
-export const listAllContacts = async () : Promise<IContact[]>=> {
-    return readData()
+export const listAllContacts = async (
+  search: string, 
+): Promise<IContact[]> => {
+  const data = await readData();
+  const searchLower = search.toLowerCase();
+  const filteredData = data.filter((c: IContact) => 
+    searchFields.some(field => 
+      String(c[field]).toLowerCase().includes(searchLower)
+    )
+  );
+  return filteredData;
 }
 
 export const getContact = async (id: string): Promise<IContact> => {

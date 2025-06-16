@@ -10,9 +10,11 @@ export const POST = async (request : Request) => {
     }
 }
 
-export const GET = async () => {
+export const GET = async (request: Request) => {
     try{
-        const contact = await listAllContacts();
+        const { searchParams } = new URL(request.url);
+        const search = searchParams.get('search') || "";
+        const contact = await listAllContacts(search);
         return Response.json({data: contact}, { status: 200 });
     }catch(e: unknown){
         return handleRouteError(e)
