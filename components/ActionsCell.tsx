@@ -9,7 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -61,7 +60,7 @@ export const ActionsCell = ({ contact }: { contact: IContact }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => redirect(`contacts/${contact.id}`)}>Voir détail</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => redirect(`contacts/${contact.id}/edit`)}>Modifier</DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>Supprimer</DropdownMenuItem>

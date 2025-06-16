@@ -47,6 +47,10 @@ export const DataTable = <TData, TValue>({
   useEffect(() => {
     if (mounted &&   showNotFoundToast) {
       toast.error("Contact introuvable.")
+
+      const url = new URL(window.location.href);
+      url.searchParams.delete("error");
+      window.history.replaceState({}, "", url.toString());
     }
   }, [mounted, showNotFoundToast])
 
