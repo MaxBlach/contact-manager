@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import {
   ColumnDef,
   flexRender,
@@ -16,16 +17,18 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[],
+import { IContact } from "@/lib/validators/contact"
+
+interface DataTableProps {
+  columns: ColumnDef<IContact, any>[]
+  data: IContact[],
 }
 
-export const DataTable = <TData, TValue>({
+export const DataTable = ({
   columns,
   data,
-}: DataTableProps<TData, TValue>) => {
-
+}: DataTableProps) => {
+  const router = useRouter()
   const table = useReactTable({
     data,
     columns,
@@ -58,6 +61,8 @@ export const DataTable = <TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="cursor-pointer"
+                onClick={() => router.push(`/contacts/${row.original.id}`)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>

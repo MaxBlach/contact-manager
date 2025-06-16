@@ -63,7 +63,7 @@ export const ActionsCell = ({ contact }: { contact: IContact }) => {
           <DropdownMenuItem onClick={() => redirect(`contacts/${contact.id}`)}>Voir détail</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => redirect(`contacts/${contact.id}/edit`)}>Modifier</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>Supprimer</DropdownMenuItem>
+          <DropdownMenuItem className="text-red-500 hover:!text-red-500" onClick={() => setOpen(true)}>Supprimer</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
