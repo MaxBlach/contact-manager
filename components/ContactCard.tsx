@@ -2,7 +2,7 @@ import { CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { IContact } from "@/lib/validators/contact"
-
+import { countryList } from "@/lib/countries"
 type Props = {
   contact: IContact;
 };
@@ -21,7 +21,7 @@ export const ContactCard = ({ contact }: Props) => {
       <div className="space-y-2 px-6">
         <p><strong>Email :</strong> {contact.email}</p>
         <p><strong>Téléphone :</strong> {contact.phoneNumber}</p>
-        <p><strong>Nationalité :</strong> {contact.nationality}</p>
+        <p><strong>Nationalité :</strong> {countryList[contact.nationality as keyof typeof countryList] || contact.nationality}</p>
       </div>
     </>
   );
