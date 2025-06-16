@@ -32,7 +32,6 @@ export const columns: ColumnDef<IContact>[] = [
     header: "Nationalité",
     cell: ({ row }) => {
       const code = row.getValue("nationality") as string;
-      console.log(code);
       return countryList[code as keyof typeof countryList] || code;
     }
   }, 
