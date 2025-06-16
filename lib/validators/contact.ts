@@ -53,7 +53,7 @@ export const contactSchema = z.object({
     civility: z.enum(["M.","Mme."]),
     name: z.string().min(1, { message: "Le nom est requis." }).trim().regex(/^[A-Za-zÀ-ÿ\-'\s]+$/,{ message: "Le nom contient un caractère invalide"}),
     firstName: z.string().min(1, { message: "Le prénom est requis." }).trim().regex(/^[A-Za-zÀ-ÿ\-'\s]+$/,{ message: "Le prénom contient un caractère invalide"}),
-    email: z.string().min(1, { message: "Le mail est requis." }).trim().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/,{ message: "Le format de numéro de téléphone est invalide"}),
+    email: z.string().min(1, { message: "Le mail est requis." }).trim().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/,{ message: "Le format de l'email est invalide"}),
     phoneNumber: z.string().min(1, { message: "Le numéro de téléphone est requis." }).trim().regex(/^\+?[0-9\s\-().]{10,20}$/,{ message: "Le format de numéro de téléphone est invalide"}),
     nationality: z.string().min(1, { message: "La nationalité est obligatoire"}).trim().regex(/^[A-Za-zÀ-ÿ\s\-']+$/)
 });
