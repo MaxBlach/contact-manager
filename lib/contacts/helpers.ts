@@ -1,50 +1,10 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { validateContact, IContact } from "../validators/contact";
-
-//setup default message for http code
-const errorCodes: Record<number, string[]> = {
-  400: ["invalid payload"],
-  404: ["not found"]
-};
+import { ValidationError } from "../utils";
 
 //fields that will be searched in the contact list
 const searchFields: (keyof IContact)[] = ['name', 'firstName', 'email', 'phoneNumber'];
-
-//if a known message is passed with e, return the correspondant status
-export const handleRouteError = (e: unknown) => {
-  let message = "Internal server error";
-  let status = 500;
-  let errors: Record<string, string> | undefined;
-
-
-  if (e instanceof ValidationError) {
-    message = e.message;
-    errors = e.errors;
-    status = 400;
-  } else if (e instanceof Error) {
-    message = e.message;
-
-    Object.entries(errorCodes).forEach(([errorCode, knownMessages]) => {
-      if (knownMessages.some(err => message.includes(err))) {
-        status = Number(errorCode);
-      }
-    });
-  }
-
-  return Response.json({ error: message, errors }, { status });
-};
-
-export class ValidationError extends Error {
-  public errors: Record<string, string>;
-
-  constructor(message: string, errors: Record<string, string>) {
-    super(message);
-    this.name = "ValidationError";
-    this.errors = errors;
-  }
-}
-
 
 const dataPath = path.join(process.cwd(), 'lib/contacts/data.json');
 
@@ -116,7 +76,7 @@ export const updateContact = async (contactId: string, contactData: IContact): P
 
     const data = await readData();
     const index = data.findIndex((c: IContact)=> c.id === contactId);
-    if (index === undefined) throw new Error("contact not found");
+    if (index === -1) throw new Error("contact not found");
 
     const updatedContact = { ...data[index], ...sanitizedData };
     data[index] = updatedContact;
