@@ -60,10 +60,19 @@ export const ActionsCell = ({ contact }: { contact: IContact }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => redirect(`contacts/${contact.id}`)}>Voir détail</DropdownMenuItem>
+          <DropdownMenuItem onClick={(e) => {
+            e.stopPropagation()
+            redirect(`contacts/${contact.id}`)
+          }}>Voir détail</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => redirect(`contacts/${contact.id}/edit`)}>Modifier</DropdownMenuItem>
-          <DropdownMenuItem className="text-red-500 hover:!text-red-500" onClick={() => setOpen(true)}>Supprimer</DropdownMenuItem>
+          <DropdownMenuItem onClick={(e) => {
+            e.stopPropagation()
+            redirect(`contacts/${contact.id}/edit`)
+          }}>Modifier</DropdownMenuItem>
+          <DropdownMenuItem className="text-red-500 hover:!text-red-500" onClick={(e) => {
+            e.stopPropagation()
+            setOpen(true)
+          }}>Supprimer</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 

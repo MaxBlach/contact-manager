@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { ActionsCell } from "@/components/ActionsCell"
 import { IContact } from "@/lib/validators/contact"
+import { countryList } from "@/lib/countries"
 
 
 export const columns: ColumnDef<IContact>[] = [
@@ -28,7 +29,12 @@ export const columns: ColumnDef<IContact>[] = [
   },
   {
     accessorKey: "nationality",
-    header: "Nationalité"
+    header: "Nationalité",
+    cell: ({ row }) => {
+      const code = row.getValue("nationality") as string;
+      console.log(code);
+      return countryList[code as keyof typeof countryList] || code;
+    }
   }, 
   {
     id: "actions",
