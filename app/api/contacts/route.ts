@@ -1,4 +1,5 @@
-import { createContact, handleRouteError, listAllContacts } from "@/lib/contacts/helpers";
+import { createContact, listAllContacts } from "@/lib/contacts/helpers";
+import { handleRouteError } from "@/lib/utils";
 
 export const POST = async (request : Request) => {
     try{

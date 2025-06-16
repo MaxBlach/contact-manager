@@ -1,4 +1,5 @@
-import { deleteContact, getContact, handleRouteError, updateContact } from "@/lib/contacts/helpers";
+import { deleteContact, getContact, updateContact } from "@/lib/contacts/helpers";
+import { handleRouteError } from "@/lib/utils";
 
 //Dynamic api's are asynchronous. Need to use await to get params.
 export const GET = async (_: Request, {params}: {params: Promise<{ id: string }>}) => {
