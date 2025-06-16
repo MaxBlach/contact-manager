@@ -38,7 +38,7 @@ const ContactListPage = () => {
             ref={fileInputRef}
             type="file"
             accept=".csv"
-            onChange={(e) => handleFileUpload(e)}
+            onChange={(e) => handleFileUpload(e, getContacts)}
             className="hidden"
           />
         </Button>

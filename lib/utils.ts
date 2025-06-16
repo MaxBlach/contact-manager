@@ -12,7 +12,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+export const handleFileUpload = async (
+  event: React.ChangeEvent<HTMLInputElement>,
+  onSuccess?: () => void
+) => {
   const file = event.target.files?.[0];
   if (!file) return;
 
@@ -45,6 +48,7 @@ export const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement
       
       if(imported > 0) {
         toast.success(`${imported} contacts importés avec succès !`);
+        onSuccess?.();
       }
 
     } catch (error) {
