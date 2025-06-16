@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Contact Manager
 
-## Getting Started
+Mini-Application de gestion de contacts construite avec Next.js + Shadcn
 
-First, run the development server:
+## Technologies Utilisées
 
+### Frontend
+- **Next.js** 
+- **TypeScript**
+- **Shadcn**
+- **Tailwind CSS**
+- **Zod**
+
+### Tests
+- **Jest** - Framework de test
+## Installation
+
+1. Clonez le repository :
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/MaxBlach/contact-manager
+cd contact-manager
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Installez les dépendances :
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Lancez le serveur de développement :
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+L'application sera accessible à l'adresse [http://localhost:3000](http://localhost:3000)
 
-## Learn More
+## Scripts Disponibles
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Lance le serveur de développement avec Turbopack
+- `npm run build` - Compile l'application pour la production
+- `npm run start` - Démarre l'application en mode production
+- `npm run lint` - Vérifie le code avec ESLint
+- `npm run test` - Lance les tests
+- `npm run test:watch` - Lance les tests en mode watch
+- `npm run test:coverage` - Génère un rapport de couverture des tests
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture
+- `/app` - Routes et pages de l'application
+- `/components` - Composants React
+- `/lib` - Utilitaires et configurations
+- `/__tests__` - Tests unitaires
+- `/lib/contact/data.json` - Simulation de base de données avec un fichier JSON pour le stockage des contacts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Fonctionnalités
 
-## Deploy on Vercel
+- Gestion complète des contacts (CRUD)
+- Table de données interactive
+- Import CSV
+- Fichiers de test disponibles dans `/csv/` pour tester la fonctionnalité d'import
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Tests
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Les tests sont écrits avec Jest et React Testing Library. Pour exécuter les tests :
+
+```bash
+npm run test
+```
+
+Pour voir la couverture des tests :
+
+```bash
+npm run test:coverage
+```
+
+## Déploiement
+
+L'application peut être déployée sur n'importe quelle plateforme supportant Next.js (Vercel, Netlify, etc.).
+
+Pour construire l'application pour la production :
+
+```bash
+npm run build
+```
