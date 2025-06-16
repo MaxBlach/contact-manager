@@ -23,7 +23,7 @@ const RootLayout = ({
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
         {children}
-        <Toaster richColors/>
+        <Toaster richColors expand closeButton/>
       </body>
     </html>
   );
