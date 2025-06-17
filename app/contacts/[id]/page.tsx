@@ -15,7 +15,7 @@ const GetContactPage = async ({ params }: { params: Promise<{ id: string }> }) =
           const json = await res.json();
     
           //used to inform user with a toast on the contact page
-          if(res.status === 404) redirect('/contacts?error=notfound');
+          if(res.status === 404) redirect('/contacts?error=Contact introuvable');
     
           throw new Error(json.error || "Erreur inattendue")
         }
