@@ -5,14 +5,28 @@ import { DataTable } from "@/components/DataTable";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, UploadIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { handleFileUpload } from "@/lib/utils";
+import { toast } from "sonner";
 
 const ContactListPage = () => {
   const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const searchParams = useSearchParams()
+
+  const error = searchParams.get('error')
+
+  useEffect(() => {
+    if(error){
+        toast.error(error)
+        const url = new URL(window.location.href);
+        url.searchParams.delete("error");
+        window.history.replaceState({}, "", url.toString());
+        }
+    })
+
 
   const getContacts = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/contacts?search=${search}`, {

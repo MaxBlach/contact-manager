@@ -1,11 +1,7 @@
-'use client'
-
 import { Toaster } from "@/components/ui/sonner"
 import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata } from 'next';
 import "./globals.css";
-import { useSearchParams } from "next/navigation";
-import { toast } from "sonner";
-import { useEffect } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,24 +12,17 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+ 
+export const metadata: Metadata = {
+  title: 'Contact Manager',
+  description: 'Application de gestion de contact',
+}
 
 const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-
-  const searchParams = useSearchParams();
-  const error = searchParams.get('error');
-
-  useEffect(() => {
-    if(error){
-        toast.error(error)
-        const url = new URL(window.location.href);
-        url.searchParams.delete("error");
-        window.history.replaceState({}, "", url.toString());
-        }
-  }, [error])
 
   return (
     <html lang="en">
